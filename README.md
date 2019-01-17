@@ -2,10 +2,10 @@
 Yet another Hexo plugin to enable awesome Webpack package system in your Hexo site.
 
 - [hexo-Webpack](#hexo-webpack)
-  - [Why not? 🤔](#why-not-%F0%9F%A4%94)
+  - [Why not? 🤔](#why-not-)
     - [What's the difference if using `hexo-Webpack`?](#whats-the-difference-if-using-hexo-webpack)
     - [Why not give a PR to the existing repo?](#why-not-give-a-pr-to-the-existing-repo)
-    - [Core concepts of hexo-Webpack 💡](#core-concepts-of-hexo-webpack-%F0%9F%92%A1)
+    - [Core concepts of hexo-Webpack 💡](#core-concepts-of-hexo-webpack-)
 
 ## Why not? 🤔
 - [hexo-renderer-Webpack](https://github.com/briangonzalez/hexo-renderer-webpack)
