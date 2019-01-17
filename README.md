@@ -31,6 +31,6 @@ I've try to support the features listed above in `hexo-renderer-Webpack4`; howev
 In the situation of multiple Webpack targets, given the same entry file `a.js` will be rendered into multiple files specified by [`output`](https://webpack.js.org/configuration/output/) in each target config. However, the both plugins listed above are all Hexo renderers, which is designed to be reactive and 1-1 file rendering.
 
 ### Core concepts of hexo-Webpack 💡
-- Proactively parse Webpack config files and expect the output folder structure in advanced.
+- Proactively parse Webpack config files and expect the output folder structure in advance.
 - Source files will not be in the output folder (i.e. `public`), only bundled files will be.
 - Render each file according to the corresponding Webpack config in the hierarchy.
