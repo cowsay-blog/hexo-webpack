@@ -23,6 +23,9 @@ Yet another Hexo plugin to enable awesome Webpack package system in your Hexo si
     - [Configuration precedence](#configuration-precedence)
       - [For the instance](#for-the-instance)
       - [For the theme](#for-the-theme)
+    - [Path resolution](#path-resolution)
+      - [Entry paths](#entry-paths)
+      - [Output paths](#output-paths)
 
 ## Features
 - Support for conventional `webpack.config.js*`
@@ -75,19 +78,27 @@ Configuration may be done at several places as shown in the table below.
 Rows in the table are in descending precedence;
 that is, the first valid config found is the effective one.
 
+> No configuration merging accross the listed places are performed in order to keep the configuration processing simple.
+> It's recommended to decide one place and place all necessary configs in the chosen place.
 
 #### For the instance
 
-| Precedence | File                             | Config Key |
-|------------|----------------------------------|------------|
-| *highest*  | `<hexo_root>/_config.yml`        | `webpack`  |
-| *lowest*   | `<hexo_root>/webpack.config.js*` |            |    
+| Precedence    | File                             | Config Key |
+|---------------|----------------------------------|------------|
+| 1 (*highest*) | `<hexo_root>/_config.yml`        | `webpack`  |
+| 0 (*lowest*)  | `<hexo_root>/webpack.config.js*` |            |    
 
 #### For the theme
 
-| Precedence | File                                                 | Config Key                                             |
-|------------|------------------------------------------------------|--------------------------------------------------------|
-| *highest*  | `<hexo_root>/_config.yml`                            | `theme_config.webpack`                                 |
-|            | `<hexo_root>/themes/<theme_name>/_config.yml`        | `webpack`                                            | |
-| *lowest*   | `<hexo_root>/themes/<theme_name>/webpack.config.js*` |                                                        |
+| Precedence    | File                                                 | Config Key                                             |
+|---------------|------------------------------------------------------|--------------------------------------------------------|
+| 2 (*highest*) | `<hexo_root>/_config.yml`                            | `theme_config.webpack`                                 |
+| 1             | `<hexo_root>/themes/<theme_name>/_config.yml`        | `webpack`                                            | |
+| 0 (*lowest*)  | `<hexo_root>/themes/<theme_name>/webpack.config.js*` |                                                        |
 
+### Path resolution
+#### Entry paths
+Each entry path is resolved from the `source/` folder of its context; that is, an entry in the *theme webpack config* is resolved from `<hexo_root>/themes/<theme_name>/source/` while an entry in the *instance webpack config* is resolved from `<hexo_root>/source/`.
+
+#### Output paths
+All output path are resolved under `<hexo_root>/public/`.
