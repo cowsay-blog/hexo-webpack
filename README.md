@@ -2,35 +2,87 @@
 Yet another Hexo plugin to enable awesome Webpack package system in your Hexo site.
 
 - [hexo-Webpack](#hexo-webpack)
+  - [Features](#features)
   - [Why not? 🤔](#why-not-)
-    - [What's the difference if using `hexo-Webpack`?](#whats-the-difference-if-using-hexo-webpack)
-    - [Why not give a PR to the existing repo?](#why-not-give-a-pr-to-the-existing-repo)
-    - [Core concepts of hexo-Webpack 💡](#core-concepts-of-hexo-webpack-)
+    - [About Hexo renderers 🎨](#about-hexo-renderers-)
+    - [Core concepts 💡](#core-concepts-)
+  - [Documentation](#documentation)
+    - [Terminology](#terminology)
+      - [*contextual configuration*](#contextual-configuration)
+      - [*instance*](#instance)
+      - [*instance config*](#instance-config)
+      - [*instance webpack config*](#instance-webpack-config)
+      - [*theme*](#theme)
+      - [*theme config*](#theme-config)
+      - [*theme webpack config*](#theme-webpack-config)
+    - [Configuration precedence](#configuration-precedence)
+      - [For the instance](#for-the-instance)
+      - [For the theme](#for-the-theme)
+
+## Features
+- Support for conventional `webpack.config.js*`
+  > `webpack.config.js` is recommended by [Webpack official](https://webpack.js.org/configuration/).
+
+- Contextual configuration ([*instance webpack config*](#instance-webpack-config) or [*theme webpack config*](theme-webpack-config))
+  > If the theme author cannot handle the webpack config of his/her theme, he/she cannot even find his/her javascript files to include theme into templates! 🤣
+
+- Contextual entry path resolution
+  > Along with the contextual configuration, webpack entries should also be resolved from their context!
 
 ## Why not? 🤔
 - [hexo-renderer-Webpack](https://github.com/briangonzalez/hexo-renderer-webpack)
 - [hexo-renderer-Webpack4](https://github.com/segayuu/hexo-renderer-webpack)
 
-The most significant reason is that, you cannot provide a logical condition when configuring Webpack because both of the 2 plugins only support configurations from Hexo's YAML config files (global `_config.yml` and theme `_config.yml`).
-Therefore you lose support from Webpack plugins in Hexo.
+The most significant reason is that, you cannot provide a **logical condition** when configuring Webpack because both of the 2 plugins only support static configuration, that is, Hexo's YAML config files.
+Besides, you lose the support from awesome [**Webpack plugins**](https://webpack.js.org/concepts/plugins/#configuration) in Hexo.
 
-### What's the difference if using `hexo-webpack`?
-- Support for `Webpack.config.js` or `Webpack.config.json`
-  > `Webpack.config.js` is recommended in [the official site of Webpack](https://webpack.js.org/configuration/).
-- Hierarchical configuration between global Hexo instance and theme
-  > That is, a theme can have its own `Webpack.config.js` to bundle its own javascript in `<hexo_root>/themes/<theme_name>/source`, while the global Hexo instace can have another Webpack config to handle javascript files in the `<hexo_root>/source`.
+### About Hexo renderers 🎨
+Renderering a file sounds like performing transformation to a file and it should be a 1-to-1 relationship between the source file and the rendered file.
 
-  > If the theme author cannot handle how his Webpack config will be, he cannot even predict where his javascript files will be after generated! 🤣
+However, in Webpack, you can configure [multiple targets](https://webpack.js.org/concepts/targets/#multiple-targets) for the same entrypoint which results in a 1-to-several relationship.
 
-- Context-aware entry path resolution
-  > That is, if the Webpack config is from the theme, the entry path(s) is (are) resolved from the theme's source folder (`<hexo_root>/themes/<theme_name>/source`), and if the config is from global, entry path(s) is (are) resolved from `<hexo_root>/source`.
+Therefore, not to be offensive to anyone but for a better experience *webpacking* in Hexo, I don't think renderer is a proper way to integrate Webpack with Hexo.
 
-### Why not give a PR to the existing repo?
-I've try to support the features listed above in `hexo-renderer-Webpack4`; however, unexpected behavior occurs when testing hierarchical configuration with [multiple Webpack targets](https://webpack.js.org/configuration/configuration-types/#exporting-multiple-configurations). Files from themes were not rendered when the promise of `Hexo#load()` resolved.
+### Core concepts 💡
+> 🚧 To be continued...
 
-In the situation of multiple Webpack targets, given the same entry file `a.js` will be rendered into multiple files specified by [`output`](https://webpack.js.org/configuration/output/) in each target config. However, the both plugins listed above are all Hexo renderers, which is designed to be reactive and 1-1 file rendering.
+## Documentation
+### Terminology
+Frequently used terms in this document are defined here.
 
-### Core concepts of `hexo-webpack` 💡
-- Proactively parse Webpack config files and expect the output folder structure in advance.
-- Source files will not be in the output folder (i.e. `public`), only bundled files will be.
-- Render each file according to the corresponding Webpack config in the hierarchy.
+#### *contextual configuration*
+Configuration that is aware of where the config file is, that is, in the instance or in a theme.
+#### *instance*  
+Your hexo instance, everything about your site, including posts, pages, data assets, scripts, source files, etc.
+#### *instance config*  
+Referred to `<hexo_root>/_config.yml`.
+#### *instance webpack config*  
+Referred to `<hexo_root>/webpack.config.js*`.
+#### *theme*  
+The theme for your hexo instance, placed under `<hexo_root>/themes/<theme_name>/`, including templates, data assets, scripts, source files, etc.
+#### *theme config*  
+Referred to ``<hexo_root>/themes/<theme_name>/_config.yml`.
+#### *theme webpack config*  
+Referred to `<hexo_root>/themes/<theme_name>/webpack.config.js*`.
+
+### Configuration precedence
+Configuration may be done at several places as shown in the table below.
+Rows in the table are in descending precedence;
+that is, the first valid config found is the effective one.
+
+
+#### For the instance
+
+| Precedence | File                             | Config Key |
+|------------|----------------------------------|------------|
+| *highest*  | `<hexo_root>/_config.yml`        | `webpack`  |
+| *lowest*   | `<hexo_root>/webpack.config.js*` |            |    
+
+#### For the theme
+
+| Precedence | File                                                 | Config Key                                             |
+|------------|------------------------------------------------------|--------------------------------------------------------|
+| *highest*  | `<hexo_root>/_config.yml`                            | `theme_config.webpack`                                 |
+|            | `<hexo_root>/themes/<theme_name>/_config.yml`        | `webpack`                                            | |
+| *lowest*   | `<hexo_root>/themes/<theme_name>/webpack.config.js*` |                                                        |
+
