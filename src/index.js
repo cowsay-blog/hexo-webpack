@@ -1,1 +1,1 @@
-module.exports = function () {}
+hexo.extend.processor.register('*', console.log)
