@@ -1,7 +1,12 @@
-# hexo-Webpack
+# hexo-webpack
 Yet another Hexo plugin to enable awesome Webpack package system in your Hexo site.
 
-- [hexo-Webpack](#hexo-webpack)
+[![Build Status](https://travis-ci.org/cowsay-blog/hexo-webpack.svg?branch=master)](https://travis-ci.org/cowsay-blog/hexo-webpack)
+[![npm](https://img.shields.io/npm/v/hexo-webpack.svg)](https://www.npmjs.com/hexo-webpack)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.carloscuesta.me/)
+
+- [hexo-webpack](#hexo-webpack)
   - [Features](#features)
   - [Why not? 🤔](#why-not-)
     - [About Hexo renderers 🎨](#about-hexo-renderers-)
