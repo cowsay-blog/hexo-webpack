@@ -23,7 +23,7 @@ Yet another Hexo plugin to enable awesome Webpack package system in your Hexo si
 - Support for conventional `webpack.config.js*`
   > `webpack.config.js` is recommended by [Webpack official](https://webpack.js.org/configuration/).
 
-- Contextual configuration ([*instance webpack config*](#instance-webpack-config) or [*theme webpack config*](theme-webpack-config))
+- Contextual configuration ([*instance webpack config*](#instance-webpack-config) or [*theme webpack config*](#theme-webpack-config))
   > If the theme author cannot handle the webpack config of his/her theme, he/she cannot even find his/her javascript files to include theme into templates! 🤣
 
 - Contextual entry path resolution
@@ -61,7 +61,7 @@ Referred to `<hexo_root>/webpack.config.js*`.
 #### *theme*  
 The theme for your hexo instance, placed under `<hexo_root>/themes/<theme_name>/`, including templates, data assets, scripts, source files, etc.
 #### *theme config*  
-Referred to ``<hexo_root>/themes/<theme_name>/_config.yml`.
+Referred to `<hexo_root>/themes/<theme_name>/_config.yml`.
 #### *theme webpack config*  
 Referred to `<hexo_root>/themes/<theme_name>/webpack.config.js*`.
 
