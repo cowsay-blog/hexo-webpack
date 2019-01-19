@@ -54,6 +54,12 @@ Therefore, not to be offensive to anyone but for a better experience *webpacking
 ### Core concepts 💡
 > 🚧 To be continued...
 
+- Hexo generator
+  - to generate routes for output files, and detect whether entry files have been changed or not
+- Event `generateAfter`
+  - to remove entry files from routers
+  - to ensure all output files are in routes
+
 ## Documentation
 ### Terminology
 Frequently used terms in this document are defined here.
