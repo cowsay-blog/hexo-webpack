@@ -1,3 +1,5 @@
+const path = require('path')
+
 /**
  * @param {string} pkg
  * @param {any} [defaultValue]
@@ -18,7 +20,20 @@ function castArray (obj) {
   return Array.isArray(obj) ? obj : [ obj ]
 }
 
+function resolveWebpackEntry (baseDir, config) {
+  config.entry = typeof config.entry === 'string' ? path.resolve(baseDir, config.entry)
+    : Array.isArray(config.entry) ? config.entry.map(eachEntry => path.resolve(baseDir, eachEntry))
+      : Object.keys(config.entry)
+        .map(key => ({ key, value: path.resolve(baseDir, config.entry[key]) }))
+        .reduce((_entry, obj) => {
+          _entry[obj.key] = obj.value
+          return _entry
+        }, {})
+  return config
+}
+
 module.exports = {
   requireIgnoreMissing,
-  castArray
+  castArray,
+  resolveWebpackEntry
 }

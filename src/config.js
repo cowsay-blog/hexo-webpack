@@ -1,14 +1,78 @@
 const path = require('path')
+const chalk = require('chalk')
 const _ = require('./lodash')
 
 const {
   requireIgnoreMissing,
-  castArray
+  castArray,
+  resolveWebpackEntry
 } = require('./utils')
+
+/**
+ * @typedef {Record<string, any>} WebpackTargetConfig
+ */
+class Config {
+  /**
+   * @param {string} source
+   * @param {() => WebpackTargetConfig} getConfig
+   */
+  constructor (source, getConfig) {
+    this.source = source
+    this.getter = getConfig
+  }
+
+  validate () {
+    if (!this.value) { // lazy load
+      this.value = this.getter()
+    }
+
+    if (!this.value) return false
+    if (!this.value.entry) {
+      hexo.log.debug(
+        chalk`Missing field: "{green entry}". {grey (Source: "%s")}`,
+        this.source
+      )
+      return false
+    }
+    const entryType = typeof this.value.entry
+    if (entryType !== 'object' || entryType !== 'string') {
+      hexo.log.debug(
+        chalk`Invalid field "{green entry}". ` +
+          `Expect string, string[] or Record<string, string>, got "{magenta %s}". ` +
+          `{grey (Source: "%s")}`,
+        entryType,
+        this.source
+      )
+      return false
+    }
+    return true
+  }
+
+  /**
+   * @return {WebpackTargetConfig[]}
+   */
+  resolve () {
+    if (typeof this.value !== 'object') return null
+    const base = [
+      Config.sources.INSTANCE,
+      Config.sources.INSTANCE_WEBPACK
+    ].includes(this.source) ? SOURCE_DIR : path.join(THEME_DIR, 'source')
+    return castArray(this.value).map(resolveWebpackEntry.bind(null, base))
+  }
+}
+
+Config.sources = {
+  INSTANCE: '_config.yml > webpack',
+  INSTANCE_WEBPACK: 'webpack.config.js*',
+  INSTANCE_THEME_CONFIG: '_config.yml > theme_config.webpack',
+  THEME: '<theme_dir>/_config.yml > webpack',
+  THEME_WEBPACK: '<theme_dir>/webpack.config.js*'
+}
 
 const {
   base_dir: BASE_DIR,
-  theme_dir: THEME_DIR
+  theme_dir: THEME_DIR,
+  source_dir: SOURCE_DIR
 } = hexo
 
 const webpackConfigFilename = 'webpack.config' // ".js" or ".json"
@@ -16,61 +80,36 @@ const webpackConfigFilename = 'webpack.config' // ".js" or ".json"
 // instance webpack
 const instanceWebpackConfigPath = path.join(BASE_DIR, webpackConfigFilename)
 const instanceWebpackConfig = [
-  _.get(hexo, 'config.webpack'),
-  requireIgnoreMissing(instanceWebpackConfigPath)
-].find(_config => validateConfig(_config))
+  new Config(
+    Config.sources.INSTANCE,
+    () => _.get(hexo, 'config.webpack')
+  ),
+  new Config(
+    Config.sources.INSTANCE_WEBPACK,
+    () => requireIgnoreMissing(instanceWebpackConfigPath)
+  )
+].find(
+  _config => _config.validate()
+).resolve()
 
 // theme webpack
 const themeWebpackConfigPath = path.join(THEME_DIR, webpackConfigFilename)
 const themeWebpackConfig = [
-  _.get(hexo, 'config.theme_config.webpack'),
-  _.get(hexo, 'theme.config.webpack'),
-  requireIgnoreMissing(themeWebpackConfigPath)
-].find(_config => validateConfig(_config))
-
-class ConfigSource {
-  /**
-   * @param {string} name
-   * @param {object} [obj]
-   */
-  constructor (name, obj) {
-    this.name = name
-    this.config = obj
-    this.valid = false
-  }
-
-  validate () {
-    
-  }
-}
-
-/**
- * @param {WebpackTargetConfig} [config]
- * @return {boolean}
- */
-function validateConfig (config) {
-  if (!config) return false
-  if (!config.entry) {
-    hexo.log.warn('Missing')
-    return false
-  }
-}
-
-/**
- * @typedef {Record<string, any>} WebpackTargetConfig
- */
-/**
- * entry paths resolution
- * @param {Array<WebpackTargetConfig>} configs
- * @param {string} base
- * @return {Array<WebpackTargetConfig>}
- */
-function resolveEntryPath (configs, base) {
-  return configs.map(_config => {
-    (_config.entry)
-    return {}
-  })
-}
+  new Config(
+    Config.sources.INSTANCE_THEME_CONFIG,
+    () => _.get(hexo, 'config.theme_config.webpack')
+  ),
+  new Config(
+    Config.sources.THEME,
+    () => _.get(hexo, 'theme.config.webpack')
+  ),
+  new Config(
+    Config.sources.THEME_WEBPACK,
+    () => requireIgnoreMissing(themeWebpackConfigPath)
+  )
+].find(
+  _config => _config.validate()
+).resolve()
 
 module.exports = {
   instance: instanceWebpackConfig,
