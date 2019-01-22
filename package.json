@@ -43,6 +43,7 @@
     "hexo": "*"
   },
   "dependencies": {
+    "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
     "hexo-util": "^0.6.3",
     "lodash.get": "^4.4.2",
