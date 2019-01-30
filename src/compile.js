@@ -20,11 +20,15 @@ module.exports = function compile (hexo, config) {
       const info = stats.toJson()
 
       if (stats.hasErrors()) {
-        hexo.log.error(info.errors)
+        info.errors.forEach(e => {
+          hexo.log.error('[hexo-webpack] ' + e)
+        })
       }
 
       if (stats.hasWarnings()) {
-        hexo.log.warn(info.warnings)
+        info.warnings.forEach(w => {
+          hexo.log.warn('[hexo-webpack] ' + w)
+        })
       }
 
       return mfs

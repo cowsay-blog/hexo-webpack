@@ -5,7 +5,8 @@ const _ = require('./lodash')
 const {
   requireIgnoreMissing,
   castArray,
-  resolveWebpackEntry
+  resolveWebpackEntry,
+  resolveWebpackOutput
 } = require('./utils')
 
 module.exports = function getConfig (hexo) {
@@ -29,18 +30,20 @@ module.exports = function getConfig (hexo) {
 
       if (!this.value) return false
       if (!this.value.entry) {
-        hexo.log.debug(
-          chalk`Missing field: "{green entry}". {grey (Source: "%s")}`,
+        hexo.log.error(
+          `[hexo-webpack] ` +
+            chalk`Missing field: "{green entry}". {grey (Source: "%s")}`,
           this.source
         )
         return false
       }
       const entryType = typeof this.value.entry
-      if (entryType !== 'object' || entryType !== 'string') {
-        hexo.log.debug(
-          chalk`Invalid field "{green entry}". ` +
-            `Expect string, string[] or Record<string, string>, got "{magenta %s}". ` +
-            `{grey (Source: "%s")}`,
+      if (entryType !== 'object' && entryType !== 'string') {
+        hexo.log.error(
+          `[hexo-webpack] ` +
+            chalk`Invalid field "{green entry}". ` +
+            chalk`Expect string, string[] or Record<string, string>, got "{magenta %s}". ` +
+            chalk`{grey (Source: "%s")}`,
           entryType,
           this.source
         )
@@ -58,7 +61,9 @@ module.exports = function getConfig (hexo) {
         Config.sources.INSTANCE,
         Config.sources.INSTANCE_WEBPACK
       ].includes(this.source) ? SOURCE_DIR : path.join(THEME_DIR, 'source')
-      return castArray(this.value).map(resolveWebpackEntry.bind(null, base))
+      return castArray(this.value)
+        .map(resolveWebpackEntry.bind(null, base))
+        .map(resolveWebpackOutput)
     }
   }
 

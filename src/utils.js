@@ -32,8 +32,26 @@ function resolveWebpackEntry (baseDir, config) {
   return config
 }
 
+function toPosixLikeAbs (filepath) {
+  const { root } = path.parse(filepath)
+  return filepath.replace(root, '/').replace(path.sep, '/')
+}
+
+function resolveWebpackOutput (config) {
+  let outputPath = !config.output || !config.output.path ? '/'
+    : toPosixLikeAbs(config.output.path)
+
+  return Object.assign(config, {
+    output: {
+      ...config.output,
+      path: outputPath
+    }
+  })
+}
+
 module.exports = {
   requireIgnoreMissing,
   castArray,
-  resolveWebpackEntry
+  resolveWebpackEntry,
+  resolveWebpackOutput
 }
