@@ -48,6 +48,7 @@
     "hexo-util": "^0.6.3",
     "lodash.get": "^4.4.2",
     "memory-fs": "^0.4.1",
+    "traverse": "^0.6.6",
     "webpack": "^4.28.4"
   }
 }
