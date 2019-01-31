@@ -1,6 +1,6 @@
 const traverse = require('traverse')
 
-module.exports = function mfsToRoute (hexo, mfs) {
+function toRoutes (mfs) {
   const paths = []
   traverse(mfs.data).forEach(function () {
     if (Buffer.isBuffer(this.node)) {
@@ -18,4 +18,8 @@ module.exports = function mfsToRoute (hexo, mfs) {
       data: () => mfs.readFileSync('/' + _path)
     }
   })
+}
+
+module.exports = {
+  toRoutes
 }
