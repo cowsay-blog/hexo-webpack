@@ -1,3 +1,6 @@
+.instance/
+.tmp/
+
 # Logs
 logs
 *.log
