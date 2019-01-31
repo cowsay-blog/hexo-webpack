@@ -55,10 +55,11 @@ Therefore, not to be offensive to anyone but for a better experience *webpacking
 > 🚧 To be continued...
 
 - Hexo generator
-  - to generate routes for output files, and detect whether entry files have been changed or not
-- Event `generateAfter`
-  - to remove entry files from routers
-  - to ensure all output files are in routes
+  - to generate routes for output files
+- Filter `after_generate`
+  - to remove unnecessary routes
+  > Entry files are served under each of their routes by default Hexo behavior,
+  > which is not necessary since only output bundles are required.
 
 ## Documentation
 ### Terminology
