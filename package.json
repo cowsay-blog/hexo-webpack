@@ -39,7 +39,6 @@
     "hexo": "^3.8.0",
     "hexo-cli": "^1.1.0",
     "hexo-front-matter": "^0.2.3",
-    "hexo-util": "^0.6.3",
     "js-yaml": "^3.12.1",
     "nanoid": "^2.0.1",
     "semantic-release": "^15.13.3",
@@ -52,6 +51,7 @@
   "dependencies": {
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
+    "hexo-util": "^0.6.3",
     "is-path-inside": "^2.0.0",
     "lodash.get": "^4.4.2",
     "memory-fs": "^0.4.1",
