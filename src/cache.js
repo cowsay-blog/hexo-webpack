@@ -21,7 +21,6 @@ async function validate (hexo, config) {
       logger.debug(chalk`Cache hits: "{green %s}"`, relPath)
       return true
     }
-
   }
   // const hash = await streamToString(
   //   fs.createReadStream(config.entry, 'utf8')
@@ -29,16 +28,6 @@ async function validate (hexo, config) {
   // )
 
   return true
-}
-
-class HexoWebpackCache {
-  constructor (cwd) {
-    this.cwd = cwd
-  }
-
-  async load () {
-    path.join(this.cwd, 'webpack.cache.json')
-  }
 }
 
 module.exports = {

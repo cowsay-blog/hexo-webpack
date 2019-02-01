@@ -7,18 +7,16 @@ const config = require('./config')(hexo)
 const webpack = require('./webpack')
 const mfs = require('./mfs')
 const cache = require('./cache')
+const WebpackDependency = require('./models/WebpackDependency')
 
 const { toHexoRoute } = require('./utils')
 
 const bundledModules = new Set()
 const outputRoutes = new Set()
 
-// register models
 hexo.on('ready', function () {
-
-})
-hexo.extend.filter.register('after_init', function () { // register models
-
+  // register WebpackDependency model
+  hexo.database.model('WebpackDependency', WebpackDependency(hexo))
 })
 
 hexo.extend.generator.register('webpack', async function () {
