@@ -23,7 +23,9 @@ hexo.extend.generator.register('webpack', function () {
     .map((webpackConfig) => webpack.installPlugins(
       [
         new webpack.ForEachModulePlugin(function ({ request }) {
-          bundledModules.add(request)
+          if (typeof request === 'string' && request.length > 0) { // may be undefined
+            bundledModules.add(request)
+          }
         })
       ],
       webpackConfig
