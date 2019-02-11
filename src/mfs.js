@@ -1,4 +1,5 @@
 const traverse = require('traverse')
+const path = require('path')
 
 function toRoutes (mfs) {
   const paths = []
@@ -6,16 +7,17 @@ function toRoutes (mfs) {
     if (Buffer.isBuffer(this.node)) {
       this.block()
     }
-    if (!this.isRoot) {
-      paths.push(this.path)
+
+    const absPath = '/' + this.path.join('/')
+    if (!this.isRoot && mfs.statSync(absPath).isFile()) {
+      paths.push(absPath)
     }
   })
 
   return paths.map(p => {
-    const _path = p.join('/')
     return {
-      path: _path,
-      data: () => mfs.readFileSync('/' + _path)
+      path: path.relative('/', p),
+      data: () => mfs.readFileSync(p)
     }
   })
 }
