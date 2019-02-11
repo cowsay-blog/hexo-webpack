@@ -37,9 +37,14 @@ Yet another Hexo plugin to enable awesome Webpack package system in your Hexo si
 - Contextual entry path resolution
   > Along with the contextual configuration, webpack entries should also be resolved from their context!
 
+- Hexo cache integration
+  > WIP 🚧
+
+  > Speed up the build process! 🚀
+
 ## Why not? 🤔
-- [hexo-renderer-Webpack](https://github.com/briangonzalez/hexo-renderer-webpack)
-- [hexo-renderer-Webpack4](https://github.com/segayuu/hexo-renderer-webpack)
+- [hexo-renderer-webpack](https://github.com/briangonzalez/hexo-renderer-webpack)
+- [hexo-renderer-webpack4](https://github.com/segayuu/hexo-renderer-webpack)
 
 The most significant reason is that, you cannot provide a **logical condition** when configuring Webpack because both of the 2 plugins only support static configuration, that is, Hexo's YAML config files.
 Besides, you lose the support from awesome [**Webpack plugins**](https://webpack.js.org/concepts/plugins/#configuration) in Hexo.
