@@ -2,6 +2,7 @@ const test = require('ava')
 const path = require('path')
 const fs = require('fs-extra')
 const streamtoString = require('stream-to-string')
+const yaml = require('js-yaml')
 
 const HexoInstance = require('../utils/HexoInstance')
 
@@ -71,4 +72,33 @@ test('contextual conventional webpack config', async (t) => {
         t.is(instanceBundle, expectedInstanceBundle)
       })
   ])
+})
+
+test('webpack config from _config.yml of theme', async (t) => {
+  t.plan(1)
+
+  /** @type {HexoInstance} */
+  const instance = t.context.instance
+
+  // writing _config.yml to theme
+  const themeWebpackConfigFile = path.join(instance.cwd, 'themes', 'test', 'webpack.config.js')
+  const themeYmlConfigFile = path.join(instance.cwd, 'themes', 'test', '_config.yml')
+  const configObj = {
+    webpack: require(themeWebpackConfigFile)
+  }
+  await fs.writeFile(themeYmlConfigFile, yaml.safeDump(configObj), 'utf8')
+  // remove theme's webpack.config.js
+  await fs.remove(themeWebpackConfigFile)
+
+  await instance.load()
+
+  const expectedThemeBundleFile = path.join(HexoInstance.resources.FIXTURE_DIR, 'theme-bundle.js')
+
+  await Promise.all([
+    await streamtoString(instance.route.get('theme-bundle.js')),
+    await streamtoString(fs.createReadStream(expectedThemeBundleFile, 'utf8'))
+  ])
+    .then(([ themeBunble, expectedThemeBunble ]) => {
+      t.is(themeBunble, expectedThemeBunble)
+    })
 })
