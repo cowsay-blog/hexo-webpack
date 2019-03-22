@@ -4,7 +4,7 @@ const chalk = require('chalk')
 const isPathInside = require('is-path-inside')
 
 const logger = require('./logger').init(hexo)
-const config = require('./config')(hexo)
+const getConfig = require('./config')
 
 const webpack = require('./webpack')
 const mfs = require('./mfs')
@@ -16,6 +16,7 @@ const THEME_SOURCE_DIR = path.resolve(hexo.theme_dir, 'source')
 const INSTANCE_SOURCE_DIR = path.resolve(hexo.source_dir)
 
 hexo.extend.generator.register('webpack', function () {
+  const config = getConfig(hexo)
   return Promise.all(
     [].concat(config.instance, config.theme)
   )
