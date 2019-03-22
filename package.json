@@ -1,6 +1,6 @@
 {
   "name": "hexo-webpack",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Yet another Hexo plugin to enable awesome Webpack package system in your Hexo site.",
   "main": "src/index.js",
   "scripts": {
